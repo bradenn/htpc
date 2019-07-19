@@ -4,11 +4,6 @@ const path = require('path')
 
 let mainWindow
 
-app.commandLine.appendSwitch('widevine-cdm-path', path.join(__dirname, '/bin/widevinecdmadapter.plugin'));
-// The version of plugin can be got from `chrome://plugins` page in Chrome.
-app.commandLine.appendSwitch('widevine-cdm-version', '1.4.8.1008');
-
-
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -27,6 +22,10 @@ function createWindow () {
   globalShortcut.register('Control+X', () => {
       mainWindow.loadFile('index.html')
     })
+  globalShortcut.register('Control+V', () => {
+      mainWindow.loadURL('https://bitmovin.com/demos/drm')
+    })
+
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -40,7 +39,13 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
-
+app.on('widevine-ready', (version, lastVersion) => {
+  if (null !== lastVersion) {
+    console.log('Widevine ' + version + ', upgraded from ' + lastVersion + ', is ready to be used!');
+  } else {
+    console.log('Widevine ' + version + ' is ready to be used!');
+  }
+});
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar

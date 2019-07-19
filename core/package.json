@@ -17,12 +17,13 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.7",
+    "electron": "https://github.com/castlabs/electron-releases#v6.0.0-wvvmp-beta.14",
     "electron-builder": "^20.38.5",
-		"electron-webpack": "^2.6.2",
-		"webpack": "^4.29.5"
+    "electron-webpack": "^2.6.2",
+    "webpack": "^4.29.5"
   },
   "dependencies": {
+    "electron": "https://github.com/castlabs/electron-releases#v6.0.0-wvvmp-beta.14",
     "electron-widevinecdm": "^7.0.0",
     "node-hid": "^0.7.9",
     "source-map-support": "^0.5.12"

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<link href="https://fonts.googleapis.com/css?family=Roboto:700&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="public/css/spotify.css">
+
+<head>
+  <title>Spotify</title>
+</head>
+
+<body>
+  <div class="track-container">
+    <div class="track-current track-secondary">
+      <img id="prev-cover" class="track-img" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+
+    </div>
+    <div class="track-current">
+      <img id="cover" class="track-img track-prim" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+    </div>
+    <div class="track-current track-secondary">
+      <img id="next-cover" class="track-img" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+    </div>
+  </div>
+  <h1 id="name" class="track-title">Catastrophize</h1>
+  <h3 id="artist" class="track-artist">Noah Kahan</h3>
+</body>
+
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<script>
+  var t = "";
+  load();
+
+  function load() {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      var request = new XMLHttpRequest();
+      var requestURL = "http://nossl.bradenn.com:3011/refresh_token?refresh_token=AQDN6zUytnckVE7o6ZS_d7tZH0gPfurFjEogt82JnR7cEm1uXAEQ1TOgH28sz0npGkxntcXhcyvpdvYRpwiu609H-AYKkn4ohGFSPVbpkWg-jPvWqseGV2zgysbLmSeU2li5pg";
+      request.open('GET', requestURL);
+      request.responseType = 'json';
+      request.send();
+      request.onload = function() {
+        const token = request.response.access_token;
+        const player = new Spotify.Player({
+          name: 'Dorm Speaker',
+          getOAuthToken: cb => {
+            cb(token);
+          }
+        });
+
+        // Error handling
+        player.addListener('initialization_error', ({
+          message
+        }) => {
+          console.error(message);
+        });
+        player.addListener('authentication_error', ({
+          message
+        }) => {
+          load();
+        });
+        player.addListener('account_error', ({
+          message
+        }) => {
+          console.error(message);
+        });
+        player.addListener('playback_error', ({
+          message
+        }) => {
+          console.error(message);
+        });
+
+        // Playback status updates
+        player.addListener('player_state_changed', state => {
+          console.log(state);
+
+          $("#name").html(state.track_window.current_track.name);
+          $("#artist").html(state.track_window.current_track.artists[0].name);
+          $("#cover").attr("src", state.track_window.current_track.album.images[2].url);
+          $("#next-cover").attr("src", state.track_window.next_tracks[0].album.images[2].url);
+          $("#prev-cover").attr("src", state.track_window.previous_tracks[1].album.images[2].url);
+        });
+
+        // Ready
+        player.addListener('ready', ({
+          device_id
+        }) => {
+          console.log('Ready with Device ID', device_id);
+        });
+
+        // Not Ready
+        player.addListener('not_ready', ({
+          device_id
+        }) => {
+          console.log('Device ID has gone offline', device_id);
+        });
+
+        // Connect to the player!
+        player.connect();
+      }
+
+
+    };
+  }
+</script>
+</body>
+
+</html>
