@@ -8,21 +8,23 @@
   <title>Spotify</title>
 </head>
 
-<body>
+<body >
+  <div id="playing-body">
   <div class="track-container">
     <div class="track-current track-secondary">
-      <img id="prev-cover" class="track-img" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+      <img id="prev-cover" class="track-img" src=""></img>
 
     </div>
     <div class="track-current">
-      <img id="cover" class="track-img track-prim" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+      <img id="cover" class="track-img " src="public/img/spotify.png"></img>
     </div>
     <div class="track-current track-secondary">
-      <img id="next-cover" class="track-img" src="https://i.scdn.co/image/4f14a038c4dfda12ae0b40fc52eea83ae0d88d65"></img>
+      <img id="next-cover" class="track-img" src=""></img>
     </div>
   </div>
-  <h1 id="name" class="track-title">Catastrophize</h1>
-  <h3 id="artist" class="track-artist">Noah Kahan</h3>
+  <h1 id="name" class="track-title"></h1>
+  <h3 id="artist" class="track-artist"></h3>
+</div>
 </body>
 
 <script src="https://sdk.scdn.co/spotify-player.js"></script>
@@ -40,7 +42,7 @@
       request.onload = function() {
         const token = request.response.access_token;
         const player = new Spotify.Player({
-          name: 'Dorm Speaker',
+          name: 'Live Display',
           getOAuthToken: cb => {
             cb(token);
           }
@@ -56,6 +58,7 @@
           message
         }) => {
           load();
+          return;
         });
         player.addListener('account_error', ({
           message
@@ -71,7 +74,6 @@
         // Playback status updates
         player.addListener('player_state_changed', state => {
           console.log(state);
-
           $("#name").html(state.track_window.current_track.name);
           $("#artist").html(state.track_window.current_track.artists[0].name);
           $("#cover").attr("src", state.track_window.current_track.album.images[2].url);

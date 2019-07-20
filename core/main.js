@@ -9,13 +9,14 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
+    fullscreen: true,
     webPreferences: {
       plugins: true
     }
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('spotify.html')
 //mainWindow.loadURL("https://bitmovin.com/demos/drm");
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
